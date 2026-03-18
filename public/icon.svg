@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <rect width="16" height="16" rx="3" fill="#a855f7"/>
+  <g fill="#fff">
+    <!-- antennae -->
+    <rect x="3" y="1" width="1" height="2"/>
+    <rect x="12" y="1" width="1" height="2"/>
+    <!-- head top -->
+    <rect x="4" y="3" width="8" height="1"/>
+    <!-- head sides -->
+    <rect x="3" y="4" width="10" height="1"/>
+    <rect x="2" y="5" width="12" height="1"/>
+    <!-- eyes row -->
+    <rect x="2" y="6" width="12" height="1"/>
+    <!-- eyes (cut out as purple) -->
+    <rect x="4" y="6" width="2" height="1" fill="#a855f7"/>
+    <rect x="10" y="6" width="2" height="1" fill="#a855f7"/>
+    <!-- mid body -->
+    <rect x="2" y="7" width="12" height="1"/>
+    <!-- mouth row -->
+    <rect x="3" y="8" width="10" height="1"/>
+    <rect x="5" y="8" width="1" height="1" fill="#a855f7"/>
+    <rect x="7" y="8" width="2" height="1" fill="#a855f7"/>
+    <rect x="10" y="8" width="1" height="1" fill="#a855f7"/>
+    <!-- lower body -->
+    <rect x="4" y="9" width="8" height="1"/>
+    <!-- legs -->
+    <rect x="3" y="10" width="2" height="2"/>
+    <rect x="7" y="10" width="2" height="1"/>
+    <rect x="11" y="10" width="2" height="2"/>
+    <!-- feet -->
+    <rect x="2" y="12" width="2" height="1"/>
+    <rect x="12" y="12" width="2" height="1"/>
+  </g>
+</svg>

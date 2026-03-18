@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Agent Wrapped — a Spotify Wrapped-style web app where users upload coding agent traces and get a visual, animated, shareable breakdown of their AI coding tool usage. See `project_spec.md` for full details.
+Agent Wrapped — a web app where users upload coding agent traces and get a visual, animated, shareable breakdown of their AI coding tool usage. See `project_spec.md` for full details.
 
 ## Important Documents
 
@@ -40,8 +40,17 @@ npm run test -- --watch path/to/file  # run single test file in watch mode
 Upload → Parse → Analyze → Render
 
 1. **Parsers** (`src/lib/parsers/`) — one parser per agent type (Claude Code, Cursor, Aider, Continue). Each parser normalizes raw trace files into a common `TraceData` schema.
-2. **Analyzers** (`src/lib/analyzers/`) — compute stats, scores, and personality insights from normalized trace data. Each analysis section (raw stats, vibe scores, AI treatment, prompt personality) is its own analyzer module.
-3. **Renderers** — React components that consume analysis output and render the animated wrapped experience.
+2. **Analyzers** (`src/lib/analyzers/`) — 7 analyzer modules compute stats, scores, and insights from normalized trace data:
+   - `raw-stats.ts` — session/message counts, token aggregation, tool ranking, coding time patterns
+   - `vibe-scores.ts` — 10 heuristic 0-100 scores with archetype label assignment
+   - `prompt-personality.ts` — word frequency, prompt style, question/command ratios
+   - `ai-treatment.ts` — politeness, patience, gratitude, frustration, assassination risk
+   - `session-details.ts` — per-session aggregates, timeline, user prompt previews
+   - `code-impact.ts` — language detection, files touched, task type classification, error rate
+   - `cost-estimate.ts` — token cost calculation with model-specific pricing
+3. **Dashboard** (`src/app/wrapped/page.tsx`) — bento-grid dashboard with Overview (11 data tiles) and Sessions (sortable/filterable table) tabs. Primary post-upload landing.
+4. **Wrapped Story** (`src/app/wrapped/story/page.tsx`) — 9-section scroll-triggered animated experience. Launched from dashboard via "Play Your Wrapped" button.
+5. **Summary Card** (`src/app/wrapped/summary/page.tsx`) — shareable screenshot card with download/share.
 
 ### Key Design Decisions
 
@@ -53,9 +62,9 @@ Upload → Parse → Analyze → Render
 
 The friendliness/treatment score uses keyword and pattern matching (no LLM). Four sub-scores weighted into a composite:
 - Politeness Tier (30%) — polite word ratio per prompt
-- Patience Score (25%) — escalation detection across correction chains
-- Gratitude Index (20%) — thank-yous after agent completes work
-- Frustration Control (25%) — inverse of caps, profanity, terse corrections
+- Patience Score (25%) — escalation detection across correction chains (per-session)
+- Gratitude Index (20%) — thank-yous after agent completes work (per-session)
+- Frustration (25%) — ratio-based: caps (15), frustration words (20), profanity (30), demanding phrases (15), terse corrections (20). All signals are ratios so scores scale with trace size. Displayed inverted in the UI (higher bar = more frustration detected).
 
 ### Vibe Coder Scores
 
@@ -63,7 +72,7 @@ Ten 0–100 scores computed via heuristics from trace data (Chaos Energy, Debugi
 
 ## Design System
 
-The UI is inspired by **Spotify Wrapped** — bold, dark, animated, and built to be screenshotted.
+The UI is bold, dark, animated, and built to be screenshotted.
 
 - **Theme**: Dark background (#0a0a0a or similar near-black), vivid gradient accents
 - **Colors**: Purple-to-pink, teal-to-blue, orange-to-yellow gradient pairs. High saturation, high contrast against dark backgrounds
