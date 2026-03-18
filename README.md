@@ -8,8 +8,8 @@ Upload your coding agent traces and get a cinematic, shareable breakdown of your
 
 100% client-side. Your data never leaves your browser.
 
-[![GitHub Stars](https://img.shields.io/github/stars/tesslateai/agent-wrapped?style=social)](https://github.com/tesslateai/agent-wrapped/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/tesslateai/agent-wrapped?style=social)](https://github.com/tesslateai/agent-wrapped/fork)
+[![GitHub Stars](https://img.shields.io/github/stars/TesslateAI/agent-wrapped?style=social)](https://github.com/TesslateAI/agent-wrapped/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/TesslateAI/agent-wrapped?style=social)](https://github.com/TesslateAI/agent-wrapped/fork)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -118,7 +118,7 @@ Everything runs in your browser. No server round-trips.
 
 ```bash
 # Clone the repo
-git clone https://github.com/tesslateai/agent-wrapped.git
+git clone https://github.com/TesslateAI/agent-wrapped.git
 cd agent-wrapped
 
 # Install dependencies
@@ -241,7 +241,7 @@ We welcome contributions! Here's how:
 - `refactor/` — code restructuring
 
 ### Good First Issues
-Look for issues labeled [`good first issue`](https://github.com/tesslateai/agent-wrapped/labels/good%20first%20issue).
+Look for issues labeled [`good first issue`](https://github.com/TesslateAI/agent-wrapped/labels/good%20first%20issue).
 
 ---
 
@@ -312,7 +312,7 @@ Each of the 10 vibe scores uses keyword-based heuristics on your prompt text. Se
 <details>
 <summary><b>How accurate is the cost estimate?</b></summary>
 
-Cost is estimated using hardcoded public API pricing for 20+ Claude model variants. Pricing data is sourced from [Anthropic's official pricing page](https://docs.anthropic.com/en/docs/about-claude/models) as of March 18, 2026. If your traces use an unknown model, a conservative fallback rate is applied and marked as "(approximate)". If rates have changed since March 2026, please [open a GitHub issue](https://github.com/tesslateai/agent-wrapped/issues/new).
+Cost is estimated using hardcoded public API pricing for 20+ Claude model variants. Pricing data is sourced from [Anthropic's official pricing page](https://docs.anthropic.com/en/docs/about-claude/models) as of March 18, 2026. If your traces use an unknown model, a conservative fallback rate is applied and marked as "(approximate)". If rates have changed since March 2026, please [open a GitHub issue](https://github.com/TesslateAI/agent-wrapped/issues/new).
 
 </details>
 
@@ -343,8 +343,8 @@ Agent Wrapped is licensed under the **Apache License 2.0**. See [LICENSE](LICENS
 
 ### If you find this useful, give it a star!
 
-[![Star on GitHub](https://img.shields.io/badge/Star%20on%20GitHub-⭐-yellow?style=for-the-badge&logo=github)](https://github.com/tesslateai/agent-wrapped)
+[![Star on GitHub](https://img.shields.io/badge/Star%20on%20GitHub-⭐-yellow?style=for-the-badge&logo=github)](https://github.com/TesslateAI/agent-wrapped)
 
-[Star this repo](https://github.com/tesslateai/agent-wrapped) · [Fork it](https://github.com/tesslateai/agent-wrapped/fork) · [Share it](https://twitter.com/intent/tweet?text=Check%20out%20Agent%20Wrapped%20-%20Spotify%20Wrapped%20for%20your%20coding%20agent%20usage!%20100%25%20client-side.&url=https://github.com/tesslateai/agent-wrapped)
+[Star this repo](https://github.com/TesslateAI/agent-wrapped) · [Fork it](https://github.com/TesslateAI/agent-wrapped/fork) · [Share it](https://twitter.com/intent/tweet?text=Check%20out%20Agent%20Wrapped%20-%20Spotify%20Wrapped%20for%20your%20coding%20agent%20usage!%20100%25%20client-side.&url=https://github.com/TesslateAI/agent-wrapped)
 
 </div>
