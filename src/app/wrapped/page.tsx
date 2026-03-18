@@ -21,6 +21,11 @@ import { ProductivityTile } from "@/components/dashboard/productivity-tile"
 import { EngagementTile } from "@/components/dashboard/engagement-tile"
 import { AchievementsTile } from "@/components/dashboard/achievements-tile"
 import type { AnalysisResult } from "@/lib/types/analysis"
+import {
+  trackDashboardViewed,
+  trackSummaryShared,
+  trackUploadReset,
+} from "@/lib/analytics/posthog"
 
 function OverviewGrid({ result }: { result: AnalysisResult }) {
   return (
@@ -95,10 +100,12 @@ function DashboardContent() {
   if (!result) return null
 
   const handleTabChange = (tab: "overview" | "sessions") => {
+    trackDashboardViewed({ tab })
     router.push(tab === "sessions" ? "/wrapped?tab=sessions" : "/wrapped")
   }
 
   const handleNewUpload = () => {
+    trackUploadReset()
     reset()
     router.push("/upload")
   }
@@ -112,6 +119,7 @@ function DashboardContent() {
 
   const handleCopyText = useCallback(async () => {
     setShowShareMenu(false)
+    trackSummaryShared({ method: "copy_text" })
     try {
       await navigator.clipboard.writeText(shareText)
       setShareStatus("done")
@@ -121,6 +129,7 @@ function DashboardContent() {
 
   const handleShareTo = useCallback((platform: string) => {
     setShowShareMenu(false)
+    trackSummaryShared({ method: platform })
     const text = encodeURIComponent(shareText)
     const urls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?text=${text}`,

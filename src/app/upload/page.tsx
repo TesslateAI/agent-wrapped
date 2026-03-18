@@ -11,6 +11,15 @@ import { ProcessingIndicator } from "@/components/upload/processing-indicator"
 import { BlurFade } from "@/components/ui/blur-fade"
 import { TextAnimate } from "@/components/ui/text-animate"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
+import {
+  trackFileUploaded,
+  trackParsingStarted,
+  trackParsingCompleted,
+  trackParsingFailed,
+  trackAnalysisCompleted,
+  trackUploadReset,
+  trackError,
+} from "@/lib/analytics/posthog"
 
 export default function UploadPage() {
   const router = useRouter()
@@ -20,24 +29,50 @@ export default function UploadPage() {
     async (files: File[]) => {
       setFiles(files)
 
+      const totalSize = files.reduce((sum, f) => sum + f.size, 0)
+      trackFileUploaded({
+        agent_type: "claude_code",
+        file_count: files.length,
+        total_size_bytes: totalSize,
+      })
+
       try {
         setStatus("parsing")
+        trackParsingStarted({ agent_type: "claude_code" })
+        const parseStart = performance.now()
         const traceData = await parseFiles(files)
         setTraceData(traceData)
+        trackParsingCompleted({
+          agent_type: "claude_code",
+          duration_ms: Math.round(performance.now() - parseStart),
+        })
 
         setStatus("analyzing")
         const result = analyzeTraces(traceData)
         setAnalysisResult(result)
+        trackAnalysisCompleted({
+          agent_type: "claude_code",
+          session_count: result.rawStats.totalSessions,
+          message_count: result.rawStats.totalMessages,
+        })
 
         router.push("/wrapped")
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to process files")
+        const message = err instanceof Error ? err.message : "Failed to process files"
+        setError(message)
+        trackParsingFailed({ agent_type: "claude_code", error_type: message })
+        trackError({
+          error_type: "parsing_error",
+          error_message: message,
+          component: "UploadPage",
+        })
       }
     },
     [setFiles, setStatus, setTraceData, setAnalysisResult, setError, router]
   )
 
   const handleRetry = useCallback(() => {
+    trackUploadReset()
     reset()
   }, [reset])
 

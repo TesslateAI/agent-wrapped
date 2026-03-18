@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { WrappedProvider } from "@/lib/store/wrapped-store";
+import { PostHogProvider } from "@/components/providers/posthog-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,7 +35,11 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <WrappedProvider>{children}</WrappedProvider>
+        <WrappedProvider>
+          <Suspense>
+            <PostHogProvider>{children}</PostHogProvider>
+          </Suspense>
+        </WrappedProvider>
       </body>
     </html>
   );

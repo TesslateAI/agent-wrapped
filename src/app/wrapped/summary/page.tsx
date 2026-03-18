@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useWrapped } from "@/lib/store/wrapped-store"
 import { captureElementAsImage } from "@/lib/export/image-export"
@@ -14,6 +14,13 @@ import { BlurFade } from "@/components/ui/blur-fade"
 import { getPersonalityProfile } from "@/lib/analyzers/personality-profiles"
 import { Download, Share2, ArrowLeft, RotateCcw } from "lucide-react"
 import Link from "next/link"
+import {
+  trackSummaryViewed,
+  trackSummaryDownloaded,
+  trackSummaryShared,
+  trackUploadReset,
+  trackError,
+} from "@/lib/analytics/posthog"
 
 function getRiskEmoji(score: number): string {
   if (score >= 80) return "💀"
@@ -56,8 +63,11 @@ export default function SummaryPage() {
     setError(null)
     try {
       await captureElementAsImage(cardRef.current)
+      trackSummaryDownloaded({ format: "png" })
     } catch (err) {
-      setError((err as Error).message)
+      const message = (err as Error).message
+      setError(message)
+      trackError({ error_type: "download_error", error_message: message, component: "SummaryPage" })
     } finally {
       setIsExporting(false)
     }
@@ -69,17 +79,26 @@ export default function SummaryPage() {
     setError(null)
     try {
       await shareWrapped(cardRef.current)
+      trackSummaryShared({ method: "native_share" })
     } catch (err) {
-      setError((err as Error).message)
+      const message = (err as Error).message
+      setError(message)
+      trackError({ error_type: "share_error", error_message: message, component: "SummaryPage" })
     } finally {
       setIsSharing(false)
     }
   }, [])
 
   const handleStartOver = useCallback(() => {
+    trackUploadReset()
     reset()
     router.push("/upload")
   }, [reset, router])
+
+  // Track summary page view on mount
+  useEffect(() => {
+    if (analysisResult) trackSummaryViewed()
+  }, [analysisResult])
 
   if (!analysisResult) {
     if (typeof window !== "undefined") {

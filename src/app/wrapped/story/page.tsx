@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useWrapped } from "@/lib/store/wrapped-store"
 import { ScrollProgress } from "@/components/ui/scroll-progress"
@@ -19,6 +19,11 @@ import { TreatmentMeter } from "@/components/wrapped/treatment-meter"
 import { TimeHeatmap } from "@/components/wrapped/time-heatmap"
 import { WordCloud } from "@/components/wrapped/word-cloud"
 import { getPersonalityProfile } from "@/lib/analyzers/personality-profiles"
+import {
+  trackStoryStarted,
+  trackStorySectionViewed,
+  trackStoryCompleted,
+} from "@/lib/analytics/posthog"
 
 function formatTokens(total: number): { value: number; suffix: string } {
   if (total >= 1_000_000) {
@@ -54,6 +59,21 @@ export default function WrappedStoryPage() {
   const tokens = formatTokens(rawStats.totalTokensUsed.total)
   const profile = getPersonalityProfile(vibeScores.overallVibe.label)
 
+  const SECTION_NAMES = [
+    "intro", "raw_stats", "your_impact", "time_patterns", "top_tools",
+    "prompt_personality", "vibe_scores", "vibe_reveal", "roast_compliment",
+    "ai_treatment", "achievements", "summary_cta",
+  ] as const
+
+  const trackSection = useCallback((index: number) => {
+    trackStorySectionViewed({
+      section_index: index,
+      section_name: SECTION_NAMES[index],
+    })
+    if (index === 0) trackStoryStarted()
+    if (index === SECTION_NAMES.length - 1) trackStoryCompleted()
+  }, [])
+
   return (
     <main className="relative">
       {/* Back to Dashboard */}
@@ -78,7 +98,7 @@ export default function WrappedStoryPage() {
       />
 
       {/* === Section 1: Intro === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(0)}>
         <BlurFade delay={0.2} inView>
           <div className="flex flex-col items-center gap-6 text-center">
             <p className="text-sm uppercase tracking-widest text-muted-foreground">
@@ -105,7 +125,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 2: Raw Stats === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(1)}>
         <div className="w-full max-w-4xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl lg:text-8xl font-black text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
@@ -150,7 +170,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 2.5: Your Impact === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(2)}>
         <div className="w-full max-w-4xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
@@ -197,7 +217,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 3: Time Patterns === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(3)}>
         <div className="w-full flex flex-col items-center gap-8">
           <BlurFade delay={0.1} inView>
             <p className="text-sm uppercase tracking-widest text-muted-foreground text-center mb-4">
@@ -213,7 +233,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 4: Top Tools === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(4)}>
         <div className="w-full max-w-lg space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
@@ -239,7 +259,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 5: Prompt Personality === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(5)}>
         <div className="w-full max-w-4xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">
@@ -279,7 +299,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 6: Vibe Scores Grid === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(6)}>
         <div className="w-full max-w-5xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
@@ -355,7 +375,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 7: Overall Vibe Reveal === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(7)}>
         <div className="relative w-full flex flex-col items-center justify-center">
           <BlurFade delay={0.3} inView>
             <VibeLabelBadge
@@ -372,7 +392,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 7.5: The Roast & Compliment === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(8)}>
         <div className="w-full max-w-2xl space-y-12">
           <BlurFade delay={0.2} inView>
             <div className="text-center">
@@ -400,7 +420,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 8: AI Treatment === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(9)}>
         <div className="w-full max-w-2xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
@@ -459,7 +479,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 8.5: Achievements === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(10)}>
         <div className="w-full max-w-3xl space-y-8">
           <BlurFade delay={0.1} inView>
             <h2 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
@@ -487,7 +507,7 @@ export default function WrappedStoryPage() {
       </ScrollSection>
 
       {/* === Section 9: Summary CTA === */}
-      <ScrollSection>
+      <ScrollSection onInView={() => trackSection(11)}>
         <div className="flex flex-col items-center gap-8 text-center">
           <BlurFade delay={0.2} inView>
             <h2 className="text-4xl md:text-6xl font-black text-white">

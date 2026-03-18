@@ -8,12 +8,14 @@ interface ScrollSectionProps {
   children: React.ReactNode
   className?: string
   delay?: number
+  onInView?: () => void
 }
 
-export function ScrollSection({ children, className, delay = 0 }: ScrollSectionProps) {
+export function ScrollSection({ children, className, delay = 0, onInView }: ScrollSectionProps) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const firedRef = useRef(false)
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -22,6 +24,13 @@ export function ScrollSection({ children, className, delay = 0 }: ScrollSectionP
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
   }, [])
+
+  useEffect(() => {
+    if (isInView && onInView && !firedRef.current) {
+      firedRef.current = true
+      onInView()
+    }
+  }, [isInView, onInView])
 
   if (prefersReducedMotion) {
     return (
