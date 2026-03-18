@@ -2,3 +2,5 @@
 node_modules
 /.next
 .env
+out/_next/static/chunks/7a1bfa254d5bf337.js
+/out
