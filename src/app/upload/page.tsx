@@ -49,6 +49,12 @@ export default function UploadPage() {
 
         setStatus("analyzing")
         const result = analyzeTraces(traceData)
+
+        if (result.rawStats.totalMessages === 0) {
+          setError("Not enough data to generate your Wrapped. The uploaded files don't contain any conversation messages.")
+          return
+        }
+
         setAnalysisResult(result)
         trackAnalysisCompleted({
           agent_type: "claude_code",
