@@ -67,8 +67,8 @@ export function ProductivityTile({ productivityStats }: ProductivityTileProps) {
 
         {/* Success Rate */}
         <Row label="Success Rate">
-          <span className={`text-sm font-semibold ${successRateColor(successRate)}`}>
-            <NumberTicker value={successRate} decimalPlaces={1} className={`text-sm font-semibold ${successRateColor(successRate)}`} />%
+          <span className={`text-sm font-semibold ${successRateColor(successRate * 100)}`}>
+            <NumberTicker value={successRate * 100} decimalPlaces={1} className={`text-sm font-semibold ${successRateColor(successRate * 100)}`} />%
           </span>
         </Row>
 

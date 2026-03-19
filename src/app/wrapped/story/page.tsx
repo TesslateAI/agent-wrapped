@@ -197,7 +197,7 @@ export default function WrappedStoryPage() {
             />
             <StatCard
               label="Success Rate"
-              value={Math.round(productivityStats.successRate)}
+              value={Math.round(productivityStats.successRate * 100)}
               suffix="%"
               gradient="from-blue-400 to-indigo-500"
             />
