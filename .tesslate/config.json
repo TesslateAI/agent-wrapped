@@ -1,0 +1,14 @@
+{
+    "apps": {
+        "agent-wrapped": {
+            "directory": ".",
+            "port": 3000,
+            "start": "npm install && npm run dev -- --hostname 0.0.0.0",
+            "env": {},
+            "x": null,
+            "y": null
+        }
+    },
+    "infrastructure": {},
+    "primaryApp": "agent-wrapped"
+}
