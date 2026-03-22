@@ -4,9 +4,10 @@
             "directory": ".",
             "port": 3000,
             "start": "npm install && npm run dev -- --hostname 0.0.0.0",
-            "env": {},
-            "x": null,
-            "y": null
+            "build": "npm run build",
+            "output": "out",
+            "framework": "nextjs",
+            "env": {}
         }
     },
     "infrastructure": {},
