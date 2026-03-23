@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 
 const CONSENT_KEY = "cookie-consent"
@@ -64,7 +65,14 @@ export function CookieConsentBanner({
               <p className="mt-1 text-xs leading-relaxed text-white/35">
                 We use PostHog to track anonymous usage events (page views,
                 button clicks) to improve the experience. No trace data is ever
-                collected.
+                collected. Read our{" "}
+                <Link
+                  href="/privacy"
+                  className="text-purple-400 underline decoration-purple-400/30 underline-offset-2 hover:text-purple-300"
+                >
+                  Privacy Policy
+                </Link>
+                .
               </p>
             </div>
             <div className="flex shrink-0 gap-3">
