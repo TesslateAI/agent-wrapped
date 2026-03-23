@@ -526,10 +526,17 @@ export default function Home() {
           <span className="text-xs text-white/20">
             Agent Wrapped — open source, privacy-first
           </span>
-          <div className="flex gap-6 text-xs text-white/15">
+          <div className="flex items-center gap-6 text-xs text-white/15">
             <span>Currently supports Claude Code</span>
             <span className="text-white/8">|</span>
             <span>More agents coming soon</span>
+            <span className="text-white/8">|</span>
+            <Link
+              href="/privacy"
+              className="text-white/25 transition-colors hover:text-white/50"
+            >
+              Privacy Policy
+            </Link>
           </div>
         </div>
       </footer>
