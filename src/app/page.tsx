@@ -21,12 +21,6 @@ const VIBE_LABELS = [
   "LGTM Speedrunner",
 ];
 
-const STATS_PREVIEW = [
-  { label: "Sessions Analyzed", value: 2847, suffix: "+" },
-  { label: "Prompts Decoded", value: 18420, suffix: "+" },
-  { label: "Vibe Scores Given", value: 847, suffix: "+" },
-];
-
 const HOW_IT_WORKS = [
   {
     step: "01",
@@ -488,22 +482,6 @@ export default function Home() {
         </BlurFade>
       </section>
 
-      {/* ─── COUNTER STRIP ─── */}
-      <section className="relative z-10 border-y border-white/[0.04] py-16">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-16 gap-y-8 px-6">
-          {STATS_PREVIEW.map((stat, i) => (
-            <BlurFade key={stat.label} delay={0.1 + i * 0.1} inView>
-              <div className="text-center">
-                <p className="text-4xl font-bold tabular-nums text-white md:text-5xl">
-                  <NumberTicker value={stat.value} delay={0.2} />
-                  {stat.suffix}
-                </p>
-                <p className="mt-1 text-sm text-white/25">{stat.label}</p>
-              </div>
-            </BlurFade>
-          ))}
-        </div>
-      </section>
 
       {/* ─── FINAL CTA ─── */}
       <section className="relative z-10 flex flex-col items-center px-6 py-32">
