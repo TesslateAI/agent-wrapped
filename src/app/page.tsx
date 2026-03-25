@@ -126,7 +126,7 @@ export default function Home() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
             <span className="text-xs font-medium tracking-wide text-white/50">
-              Now supporting Claude Code traces
+              Now supporting Claude Code & Tesslate Studio
             </span>
           </div>
         </BlurFade>
@@ -527,9 +527,7 @@ export default function Home() {
             Agent Wrapped — open source, privacy-first
           </span>
           <div className="flex items-center gap-6 text-xs text-white/15">
-            <span>Currently supports Claude Code</span>
-            <span className="text-white/8">|</span>
-            <span>More agents coming soon</span>
+            <span>Supports Claude Code & Tesslate Studio</span>
             <span className="text-white/8">|</span>
             <Link
               href="/privacy"

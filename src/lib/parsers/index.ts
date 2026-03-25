@@ -2,18 +2,19 @@
  * Parser entry point.
  *
  * Validates uploaded files and dispatches to the appropriate format-specific parser.
- * For the MVP, only Claude Code JSONL is supported.
+ * Supports Claude Code (JSONL) and Tesslate Studio (JSON) trace formats.
  */
 
 import type { TraceData } from "@/lib/types"
 import { parseClaudeCodeFiles } from "./claude-code"
-import { validateFileType, validateFileSize, isTraceFile } from "./file-utils"
+import { parseTesslateStudioFiles } from "./tesslate-studio"
+import { validateFileType, validateFileSize, isTraceFile, readFileAsText, detectTraceFormat } from "./file-utils"
 
 /**
  * Parse uploaded trace files into normalized TraceData.
  *
- * Validates file type and size before parsing. Currently assumes Claude Code
- * format — future versions will auto-detect based on file contents.
+ * Validates file type and size, then auto-detects the trace format
+ * based on file content and routes to the appropriate parser.
  */
 export async function parseFiles(files: File[]): Promise<TraceData> {
   if (files.length === 0) {
@@ -46,10 +47,30 @@ export async function parseFiles(files: File[]): Promise<TraceData> {
     throw new Error("No valid trace files found")
   }
 
-  return parseClaudeCodeFiles(traceFiles)
+  // Auto-detect format from the first file's content
+  const firstFileText = await readFileAsText(traceFiles[0])
+  const format = detectTraceFormat(firstFileText)
+
+  switch (format) {
+    case "tesslate-studio":
+      return parseTesslateStudioFiles(traceFiles)
+    case "claude-code":
+      return parseClaudeCodeFiles(traceFiles)
+    default: {
+      // Fallback: try Claude Code parser for .jsonl files, Tesslate for .json
+      const name = traceFiles[0].name.toLowerCase()
+      if (name.endsWith(".jsonl")) {
+        return parseClaudeCodeFiles(traceFiles)
+      } else if (name.endsWith(".json")) {
+        return parseTesslateStudioFiles(traceFiles)
+      }
+      throw new Error("Unrecognized trace file format. Please upload Claude Code (.jsonl) or Tesslate Studio (.json) trace files.")
+    }
+  }
 }
 
 export { parseClaudeCodeFiles } from "./claude-code"
+export { parseTesslateStudioFiles } from "./tesslate-studio"
 export {
   readFileAsText,
   parseJSONL,
@@ -58,4 +79,5 @@ export {
   isTraceFile,
   readDirectoryEntries,
   filterTraceFiles,
+  detectTraceFormat,
 } from "./file-utils"

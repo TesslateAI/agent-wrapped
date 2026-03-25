@@ -31,19 +31,20 @@ export default function UploadPage() {
 
       const totalSize = files.reduce((sum, f) => sum + f.size, 0)
       trackFileUploaded({
-        agent_type: "claude_code",
+        agent_type: "auto_detect",
         file_count: files.length,
         total_size_bytes: totalSize,
       })
 
       try {
         setStatus("parsing")
-        trackParsingStarted({ agent_type: "claude_code" })
+        trackParsingStarted({ agent_type: "auto_detect" })
         const parseStart = performance.now()
         const traceData = await parseFiles(files)
+        const agentType = traceData.source === "tesslate-studio" ? "tesslate_studio" : "claude_code"
         setTraceData(traceData)
         trackParsingCompleted({
-          agent_type: "claude_code",
+          agent_type: agentType,
           duration_ms: Math.round(performance.now() - parseStart),
         })
 
@@ -57,7 +58,7 @@ export default function UploadPage() {
 
         setAnalysisResult(result)
         trackAnalysisCompleted({
-          agent_type: "claude_code",
+          agent_type: agentType,
           session_count: result.rawStats.totalSessions,
           message_count: result.rawStats.totalMessages,
         })
@@ -66,7 +67,7 @@ export default function UploadPage() {
       } catch (err) {
         const message = err instanceof Error ? err.message : "Failed to process files"
         setError(message)
-        trackParsingFailed({ agent_type: "claude_code", error_type: message })
+        trackParsingFailed({ agent_type: "auto_detect", error_type: message })
         trackError({
           error_type: "parsing_error",
           error_message: message,

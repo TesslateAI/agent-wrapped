@@ -42,7 +42,7 @@ export function FileDropzone({ onFilesSelected }: FileDropzoneProps) {
       const traceFiles = filterTraceFiles(allFiles)
 
       if (traceFiles.length === 0) {
-        setErrors(["No trace files (.jsonl) found. Make sure you're uploading your .claude/ directory or individual .jsonl files."])
+        setErrors(["No trace files found. Upload your .claude/ directory (.jsonl files) or Tesslate Studio export (.json files)."])
         setIsScanning(false)
         return
       }
@@ -246,7 +246,7 @@ export function FileDropzone({ onFilesSelected }: FileDropzoneProps) {
 
               <div>
                 <p className="text-lg font-medium text-white/90">
-                  {isDragOver ? "Drop it here" : "Drop a folder or .jsonl files here"}
+                  {isDragOver ? "Drop it here" : "Drop a folder, .jsonl, or .json files here"}
                 </p>
                 <p className="mt-1 text-sm text-white/50">
                   or use the buttons below to browse
@@ -277,7 +277,7 @@ export function FileDropzone({ onFilesSelected }: FileDropzoneProps) {
               </div>
 
               <p className="text-xs text-white/30">
-                We&apos;ll find all .jsonl trace files automatically
+                We&apos;ll find all trace files automatically
               </p>
             </>
           )}
@@ -323,7 +323,7 @@ export function FileDropzone({ onFilesSelected }: FileDropzoneProps) {
           Where are my trace files?
         </p>
         <p className="mb-4 text-[13px] leading-relaxed text-white/30">
-          Claude Code stores traces in a hidden <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-white/50">.claude/</code> folder in your home directory.
+          Claude Code traces are in your <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-white/50">.claude/</code> folder. Tesslate Studio traces can be exported as JSON.
         </p>
 
         <div className="space-y-1">
@@ -447,6 +447,42 @@ export function FileDropzone({ onFilesSelected }: FileDropzoneProps) {
                   </span>
                 </li>
               </ul>
+            </div>
+          </details>
+
+          {/* Tesslate Studio */}
+          <details className="group rounded-lg border border-white/[0.04] bg-white/[0.01]">
+            <summary className="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium text-white/50 transition-colors hover:text-white/70">
+              <span className="flex items-center gap-2">
+                <svg className="h-4 w-4 text-white/30" viewBox="0 0 161.9 126.66" fill="currentColor">
+                  <path d="m13.45,46.48h54.06c10.21,0,16.68-10.94,11.77-19.89l-9.19-16.75c-2.36-4.3-6.87-6.97-11.77-6.97H22.41c-4.95,0-9.5,2.73-11.84,7.09L1.61,26.71c-4.79,8.95,1.69,19.77,11.84,19.77Z" />
+                  <path d="m61.05,119.93l26.95-46.86c5.09-8.85-1.17-19.91-11.37-20.12l-19.11-.38c-4.9-.1-9.47,2.48-11.91,6.73l-17.89,31.12c-2.47,4.29-2.37,9.6.25,13.8l10.05,16.13c5.37,8.61,17.98,8.39,23.04-.41Z" />
+                  <path d="m148.46,0h-54.06c-10.21,0-16.68,10.94-11.77,19.89l9.19,16.75c2.36,4.3,6.87,6.97,11.77,6.97h35.9c4.95,0,9.5-2.73,11.84-7.09l8.97-16.75C165.08,10.82,158.6,0,148.46,0Z" />
+                </svg>
+                Tesslate Studio
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-open:rotate-180">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <div className="px-4 pb-4">
+              <ul className="space-y-2 text-[13px] text-white/30">
+                <li className="flex gap-2">
+                  <span className="shrink-0 text-white/20">1.</span>
+                  <span>
+                    Export your trace data from Tesslate Studio as a JSON file
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="shrink-0 text-white/20">2.</span>
+                  <span>
+                    Drop the <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-white/50">.json</code> export file(s) into the box above
+                  </span>
+                </li>
+              </ul>
+              <p className="mt-3 text-[11px] text-white/20">
+                Supports both single-project and full account exports.
+              </p>
             </div>
           </details>
         </div>
