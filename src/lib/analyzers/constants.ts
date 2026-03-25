@@ -151,7 +151,12 @@ export const STOPWORDS = new Set([
   "some", "any", "other", "new",
 ])
 
-export const FILE_TOOL_NAMES = ["Read", "Edit", "Write", "Glob", "Grep"]
+export const FILE_TOOL_NAMES = [
+  // Claude Code tools
+  "Read", "Edit", "Write", "Glob", "Grep",
+  // Tesslate Studio tools
+  "read_file", "write_file", "edit_file",
+]
 
 export const EXTENSION_TO_LANGUAGE: Record<string, string> = {
   ".ts": "TypeScript", ".tsx": "TypeScript", ".js": "JavaScript", ".jsx": "JavaScript",

@@ -223,7 +223,14 @@ function DashboardContent() {
     <main className="min-h-screen bg-[#0a0a0a] px-4 py-6 md:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+            {state.traceData?.source && (
+              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5 text-xs font-medium text-white/40">
+                {state.traceData.source === "tesslate-studio" ? "Tesslate Studio" : "Claude Code"}
+              </span>
+            )}
+          </div>
 
           {/* Desktop nav — hidden on small screens */}
           <div className="hidden md:flex items-center gap-3">

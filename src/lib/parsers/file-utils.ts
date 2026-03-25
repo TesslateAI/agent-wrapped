@@ -4,7 +4,7 @@
  */
 
 const ACCEPTED_EXTENSIONS = [".jsonl", ".json", ".zip"]
-const TRACE_EXTENSIONS = [".jsonl"]
+const TRACE_EXTENSIONS = [".jsonl", ".json"]
 const DEFAULT_MAX_BYTES = 100 * 1024 * 1024 // 100MB
 
 /**
@@ -105,9 +105,25 @@ export async function readDirectoryEntries(
   return files
 }
 
+// JSON files that are never trace files (common project config files)
+const JSON_SKIP_LIST = new Set([
+  "package.json",
+  "package-lock.json",
+  "tsconfig.json",
+  "tsconfig.node.json",
+  "tsconfig.app.json",
+  "next.config.json",
+  ".eslintrc.json",
+  "composer.json",
+  "manifest.json",
+  "settings.json",
+  "launch.json",
+  "extensions.json",
+])
+
 /**
- * Filter files from a directory to only include relevant Claude Code trace files.
- * Looks for .jsonl files in projects/ subdirectories (conversation logs).
+ * Filter files from a directory to only include relevant trace files.
+ * Accepts .jsonl files (Claude Code) and .json files (Tesslate Studio).
  * Skips meta files, settings, and other non-trace files.
  */
 export function filterTraceFiles(files: File[]): File[] {
@@ -115,8 +131,8 @@ export function filterTraceFiles(files: File[]): File[] {
     const path = file.webkitRelativePath || file.name
     const name = file.name.toLowerCase()
 
-    // Must be a JSONL file
-    if (!name.endsWith(".jsonl")) return false
+    // Must be a JSONL or JSON file
+    if (!name.endsWith(".jsonl") && !name.endsWith(".json")) return false
 
     // Skip the global history.jsonl (it's just snapshots, not full conversations)
     if (name === "history.jsonl") return false
@@ -124,15 +140,54 @@ export function filterTraceFiles(files: File[]): File[] {
     // Skip subagent meta files
     if (name.endsWith(".meta.json")) return false
 
-    // Prefer files inside projects/ directories (full conversation logs)
-    // but also accept top-level .jsonl files
+    // Skip known non-trace JSON config files
+    if (JSON_SKIP_LIST.has(name)) return false
+
     const pathLower = path.toLowerCase()
 
     // Skip settings, cache, and other non-trace directories
     if (pathLower.includes("/cache/") || pathLower.includes("/backups/")) return false
+    if (pathLower.includes("/node_modules/")) return false
 
     return true
   })
+}
+
+/**
+ * Detect the trace format from file content.
+ * Checks for Tesslate Studio signature keys in JSON files.
+ */
+export function detectTraceFormat(text: string): "claude-code" | "tesslate-studio" | "unknown" {
+  // Try to parse as JSON first (Tesslate format)
+  try {
+    const parsed = JSON.parse(text)
+    if (typeof parsed === "object" && parsed !== null) {
+      // Tesslate exports have "chats" + ("agent_steps" or "messages" + "usage_logs")
+      const hasTesslateKeys =
+        ("chats" in parsed && "agent_steps" in parsed) ||
+        ("chats" in parsed && "messages" in parsed && "usage_logs" in parsed) ||
+        ("project" in parsed && "messages" in parsed) ||
+        ("projects" in parsed && "messages" in parsed)
+      if (hasTesslateKeys) return "tesslate-studio"
+    }
+  } catch {
+    // Not valid JSON — could be JSONL (Claude Code format)
+  }
+
+  // Check if it looks like JSONL (Claude Code)
+  const firstLine = text.split("\n").find((l) => l.trim() !== "")
+  if (firstLine) {
+    try {
+      const parsed = JSON.parse(firstLine)
+      if (typeof parsed === "object" && parsed !== null && "sessionId" in parsed) {
+        return "claude-code"
+      }
+    } catch {
+      // Not JSONL either
+    }
+  }
+
+  return "unknown"
 }
 
 /**

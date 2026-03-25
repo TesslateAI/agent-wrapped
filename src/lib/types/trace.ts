@@ -40,7 +40,7 @@ export interface ClaudeCodeRawMessage {
 }
 
 // === Normalized Schema (parser output / analyzer input) ===
-export type TraceSource = "claude-code" | "cursor" | "aider" | "continue" | "unknown"
+export type TraceSource = "claude-code" | "tesslate-studio" | "cursor" | "aider" | "continue" | "unknown"
 
 export interface TraceData {
   source: TraceSource

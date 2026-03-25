@@ -1,0 +1,290 @@
+{
+  "exported_at": "2026-03-22T21:50:35.671961+00:00",
+  "project": {
+    "id": "proj-001",
+    "name": "Test Project",
+    "slug": "test-project-abc",
+    "description": "A test project",
+    "owner_id": "user-001",
+    "has_git_repo": true,
+    "git_remote_url": "https://github.com/example/test.git",
+    "deploy_type": "development",
+    "environment_status": "active",
+    "created_at": "2026-03-20T10:00:00.000000+00:00",
+    "updated_at": "2026-03-22T12:00:00.000000+00:00"
+  },
+  "chats": [
+    {
+      "id": "chat-001",
+      "user_id": "user-001",
+      "project_id": "proj-001",
+      "created_at": "2026-03-22T10:00:00.000000+00:00",
+      "title": "Install shadcn",
+      "origin": "browser",
+      "status": "completed",
+      "updated_at": "2026-03-22T10:05:00.000000+00:00"
+    },
+    {
+      "id": "chat-002",
+      "user_id": "user-001",
+      "project_id": "proj-001",
+      "created_at": "2026-03-22T11:00:00.000000+00:00",
+      "title": "Fix login bug",
+      "origin": "browser",
+      "status": "completed",
+      "updated_at": "2026-03-22T11:10:00.000000+00:00"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-001",
+      "chat_id": "chat-001",
+      "role": "user",
+      "content": "install shadcn please",
+      "message_metadata": null,
+      "created_at": "2026-03-22T10:00:00.000000+00:00",
+      "updated_at": "2026-03-22T10:00:00.000000+00:00"
+    },
+    {
+      "id": "msg-002",
+      "chat_id": "chat-001",
+      "role": "assistant",
+      "content": "I'll install shadcn for you.",
+      "message_metadata": {
+        "agent_mode": true,
+        "agent_type": "TesslateAgent",
+        "iterations": 2,
+        "tool_calls_made": 2,
+        "completion_reason": "completed",
+        "executed_by": "worker",
+        "task_id": "task-001"
+      },
+      "created_at": "2026-03-22T10:00:05.000000+00:00",
+      "updated_at": "2026-03-22T10:02:00.000000+00:00"
+    },
+    {
+      "id": "msg-003",
+      "chat_id": "chat-001",
+      "role": "user",
+      "content": "thanks, that looks great!",
+      "message_metadata": null,
+      "created_at": "2026-03-22T10:03:00.000000+00:00",
+      "updated_at": "2026-03-22T10:03:00.000000+00:00"
+    },
+    {
+      "id": "msg-004",
+      "chat_id": "chat-002",
+      "role": "user",
+      "content": "fix the login bug in auth.ts",
+      "message_metadata": null,
+      "created_at": "2026-03-22T11:00:00.000000+00:00",
+      "updated_at": "2026-03-22T11:00:00.000000+00:00"
+    },
+    {
+      "id": "msg-005",
+      "chat_id": "chat-002",
+      "role": "assistant",
+      "content": "I found and fixed the bug.",
+      "message_metadata": {
+        "agent_mode": true,
+        "agent_type": "TesslateAgent",
+        "iterations": 3,
+        "tool_calls_made": 3,
+        "completion_reason": "completed",
+        "executed_by": "worker",
+        "task_id": "task-002"
+      },
+      "created_at": "2026-03-22T11:00:10.000000+00:00",
+      "updated_at": "2026-03-22T11:05:00.000000+00:00"
+    }
+  ],
+  "agent_steps": [
+    {
+      "id": "step-001",
+      "message_id": "msg-002",
+      "chat_id": "chat-001",
+      "step_index": 0,
+      "step_data": {
+        "iteration": 1,
+        "thought": null,
+        "tool_calls": [
+          {
+            "name": "bash_exec",
+            "parameters": {
+              "command": "npx shadcn-ui@latest init"
+            },
+            "result": {
+              "success": true,
+              "tool": "bash_exec",
+              "result": {
+                "success": true,
+                "message": "Command executed successfully",
+                "output": "shadcn-ui initialized"
+              }
+            }
+          }
+        ],
+        "response_text": "",
+        "is_complete": false,
+        "timestamp": "2026-03-22T10:00:10.000000+00:00"
+      },
+      "created_at": "2026-03-22T10:00:10.000000+00:00"
+    },
+    {
+      "id": "step-002",
+      "message_id": "msg-002",
+      "chat_id": "chat-001",
+      "step_index": 1,
+      "step_data": {
+        "iteration": 2,
+        "thought": "Let me verify the installation",
+        "tool_calls": [
+          {
+            "name": "read_file",
+            "parameters": {
+              "path": "/app/components.json"
+            },
+            "result": {
+              "success": true,
+              "tool": "read_file",
+              "result": {
+                "success": true,
+                "message": "File read successfully",
+                "file_path": "/app/components.json",
+                "content": "{\"style\": \"default\"}"
+              }
+            }
+          }
+        ],
+        "response_text": "shadcn is installed successfully.",
+        "is_complete": true,
+        "timestamp": "2026-03-22T10:01:00.000000+00:00"
+      },
+      "created_at": "2026-03-22T10:01:00.000000+00:00"
+    },
+    {
+      "id": "step-003",
+      "message_id": "msg-005",
+      "chat_id": "chat-002",
+      "step_index": 0,
+      "step_data": {
+        "iteration": 1,
+        "thought": null,
+        "tool_calls": [
+          {
+            "name": "read_file",
+            "parameters": {
+              "path": "/app/src/auth.ts"
+            },
+            "result": {
+              "success": true,
+              "tool": "read_file",
+              "result": {
+                "success": true,
+                "message": "File read successfully",
+                "file_path": "/app/src/auth.ts",
+                "content": "export function login() { ... }"
+              }
+            }
+          }
+        ],
+        "response_text": "",
+        "is_complete": false,
+        "timestamp": "2026-03-22T11:00:15.000000+00:00"
+      },
+      "created_at": "2026-03-22T11:00:15.000000+00:00"
+    },
+    {
+      "id": "step-004",
+      "message_id": "msg-005",
+      "chat_id": "chat-002",
+      "step_index": 1,
+      "step_data": {
+        "iteration": 2,
+        "thought": null,
+        "tool_calls": [
+          {
+            "name": "edit_file",
+            "parameters": {
+              "file_path": "/app/src/auth.ts",
+              "changes": "fixed login validation"
+            },
+            "result": {
+              "success": true,
+              "tool": "edit_file",
+              "result": {
+                "success": true,
+                "message": "File edited successfully"
+              }
+            }
+          }
+        ],
+        "response_text": "",
+        "is_complete": false,
+        "timestamp": "2026-03-22T11:01:00.000000+00:00"
+      },
+      "created_at": "2026-03-22T11:01:00.000000+00:00"
+    },
+    {
+      "id": "step-005",
+      "message_id": "msg-005",
+      "chat_id": "chat-002",
+      "step_index": 2,
+      "step_data": {
+        "iteration": 3,
+        "thought": null,
+        "tool_calls": [
+          {
+            "name": "bash_exec",
+            "parameters": {
+              "command": "npm test"
+            },
+            "result": {
+              "success": false,
+              "tool": "bash_exec",
+              "error": "Test failed: expected true got false"
+            }
+          }
+        ],
+        "response_text": "I fixed the login bug but one test is still failing.",
+        "is_complete": true,
+        "timestamp": "2026-03-22T11:02:00.000000+00:00"
+      },
+      "created_at": "2026-03-22T11:02:00.000000+00:00"
+    }
+  ],
+  "usage_logs": [
+    {
+      "id": "usage-001",
+      "user_id": "user-001",
+      "agent_id": "agent-001",
+      "project_id": "proj-001",
+      "model": "builtin/claude-sonnet-4.6",
+      "tokens_input": 1500,
+      "tokens_output": 200,
+      "cost_input": 1,
+      "cost_output": 1,
+      "cost_total": 2,
+      "billed_status": "credited",
+      "created_at": "2026-03-22T10:00:08.000000+00:00",
+      "is_byok": false
+    },
+    {
+      "id": "usage-002",
+      "user_id": "user-001",
+      "agent_id": "agent-001",
+      "project_id": "proj-001",
+      "model": "claude-sonnet-4.6",
+      "tokens_input": 2000,
+      "tokens_output": 350,
+      "cost_input": 1,
+      "cost_output": 1,
+      "cost_total": 2,
+      "billed_status": "credited",
+      "created_at": "2026-03-22T11:00:12.000000+00:00",
+      "is_byok": false
+    }
+  ],
+  "agent_command_logs": [],
+  "shell_sessions": []
+}
